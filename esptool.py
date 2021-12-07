@@ -428,6 +428,8 @@ class ESPLoader(object):
     def command(self, op=None, data=b"", chk=0, wait_response=True, timeout=DEFAULT_TIMEOUT):
         saved_timeout = self._port.timeout
         new_timeout = min(timeout, MAX_TIMEOUT)
+        # ensure minimum timeout of 1 second, solves problems when using RFC2217 on slow IP connections
+        new_timeout = max(timeout, 1)
         if new_timeout != saved_timeout:
             self._port.timeout = new_timeout
 
